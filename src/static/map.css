@@ -1,0 +1,373 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    background: white;
+    font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    min-height: 100vh;
+    overflow: hidden;
+    padding: 0;
+}
+
+h1 {
+    font-size: 24px;
+    margin-bottom: 5px;
+}
+
+h2 {
+    font-size: 18px;
+    margin-bottom: 10px;
+}
+
+p {
+    color: rgb(99, 99, 99);
+}
+
+hr {
+   color: rgb(247, 231, 231);
+   margin-top: 10px;
+   margin-bottom: 10px;
+   border-bottom: 1px solid rgb(218, 218, 218);
+}
+
+
+#map-page {
+    display: flex;
+    flex-direction: row;
+    gap: 40px;
+    align-items: stretch;
+    min-height: 100vh;
+    width: 100%;
+}
+
+#map {
+    flex: 1;
+    margin-top: 15px;
+    overflow: hidden;
+    background: #fff;
+    cursor: default;
+    position: relative;
+}
+
+#map svg {
+    width: 100%;
+    height: 100%;
+    display: block;
+}
+
+#map svg text {
+    font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+}
+
+#map-panel {
+    position: sticky; top: 0;
+    width: 350px;
+    flex-shrink: 0;
+    padding: 16px;
+    background-color: #f5f5f5;
+    border-right: 1px solid #ccc;
+    height: 100vh;
+    overflow-y: auto;
+}
+/* 
+.ld {
+    display: inline-block;
+    width: 13px;
+    height: 13px;
+    border-radius: 50%;
+    vertical-align: middle;
+} */
+
+.ld {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 13px;
+    height: 13px;
+    border-radius: 50%;
+    vertical-align: middle;
+    font-size: 8px;
+    font-weight: 700;
+    color: #fff;
+}
+
+.glx-btns {
+    display: flex;
+    gap: 4px;
+}
+
+.glx-btn {
+    flex: 1;
+    padding: 7px 0;
+    border: 1px solid #ccc;
+    background: transparent;
+    color: #666;
+    font-family: inherit;
+    font-size: 12px;
+    font-weight: 500;
+    cursor: pointer;
+    border-radius: 6px;
+    transition: all 0.15s;
+}
+
+.glx-btn.active {
+    background: #888;
+    color: #fff;
+    border-color: #888;
+}
+
+.glx-btn.glx-active {
+    background: #2ec48a;
+    color: #fff;
+    border-color: #2ec48a;
+}
+
+.dir-btns {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px 10px; /* 6px vertical, 16px horizontal */
+}
+
+.stop-list {
+    max-height: 200px;
+    overflow-y: auto;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    background: #fff;
+    margin-top: 6px;
+}
+
+.stop-list:empty {
+    display: none;
+}
+
+.stop-item {
+    padding: 5px 10px;
+    font-size: 12px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.stop-item.dimmed {
+    opacity: 0.35;
+    pointer-events: none;
+}
+
+.stop-item:hover {
+    background: #f0f0f0;
+}
+
+#select-all-item {
+    border-bottom: 1px solid #ddd;
+    margin-bottom: 4px;
+    padding-bottom: 6px;
+}
+
+.tooltip {
+    position: fixed;
+    pointer-events: none;
+    background: #1a1f2b;
+    color: #e6edf3;
+    border: 1px solid #2e3545;
+    border-radius: 10px;
+    padding: 12px 14px;
+    min-width: 210px;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
+    font-family: inherit;
+    font-size: 12px;
+    z-index: 1000;
+    opacity: 0;
+    transition: opacity 0.12s;
+}
+
+.tooltip.visible {
+    opacity: 1;
+}
+
+.tt-header {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    margin-bottom: 8px;
+}
+
+.tt-name {
+    font-size: 14px;
+    font-weight: 700;
+}
+
+.tt-badges {
+    display: flex;
+    gap: 3px;
+}
+
+.tt-badge {
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 8px;
+    font-weight: 800;
+    color: #fff;
+}
+
+.tt-stat {
+    display: flex;
+    justify-content: space-between;
+    padding: 2px 0;
+}
+
+.tt-label {
+    color: #8b949e;
+}
+
+.tt-value {
+    font-family: 'Courier New', monospace;
+    font-weight: 600;
+}
+
+.tt-glx {
+    display: inline-block;
+    margin-top: 8px;
+    padding: 2px 8px;
+    background: #2ec48a;
+    color: #1a1f2b;
+    font-size: 9px;
+    font-weight: 700;
+    border-radius: 3px;
+    letter-spacing: 0.04em;
+}
+
+.line-label { cursor: help; }
+
+.tt-line-header {
+    margin-bottom: 8px;
+}
+
+/* ── Info button ── */
+#info-btn {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    border: 1px solid rgba(0, 0, 0, 0.2);
+    background: rgba(255, 255, 255, 0.85);
+    font-size: 18px;
+    line-height: 1;
+    cursor: pointer;
+    z-index: 200;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background 0.15s;
+    padding: 0;
+}
+
+#info-btn:hover {
+    background: rgba(220, 220, 220, 0.95);
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+}
+
+/* ── Info popup ── */
+#info-popup {
+    position: fixed;
+    bottom: 60px;
+    right: 60px;
+    width: 320px;
+    background: #fff;
+    border-radius: 10px;
+    padding: 16px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    z-index: 500;
+    font-size: 14px;
+    line-height: 1.5;
+}
+
+#info-popup h3 {
+    margin: 0 0 6px;
+    font-size: 14px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: #333;
+}
+
+#info-popup p,
+#info-popup ul {
+    margin: 0 0 14px;
+    color: #444;
+}
+
+#info-popup ul {
+    padding-left: 18px;
+}
+
+#info-popup li {
+    margin-bottom: 6px;
+}
+
+/* ── Popup close button ── */
+#info-popup-close {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    width: 24px;
+    height: 24px;
+    border: none;
+    background: transparent;
+    font-size: 18px;
+    line-height: 1;
+    cursor: pointer;
+    color: #666;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 4px;
+    transition: background 0.15s;
+    padding: 0;
+}
+
+#map-stats {
+    position: fixed;
+    top: 12px;
+    left: 390px; /* panel width (350) + gap (40) */
+    /* background-color: #f5f5f5; */
+    border: 1px solid rgba(0, 0, 0, 0.5);
+    border-radius: 10px;
+    padding: 10px 14px;
+    font-size: 14px;
+    z-index: 200;
+    line-height: 1.8;
+    width: 300px;
+}
+
+#map-stats h3 {
+    color: #333;
+}
+
+#map-stats p {
+    color: #333;
+}
+
+#info-popup-close:hover {
+    background: #f0f0f0;
+    color: #222;
+}
+
+/* ── Utility ── */
+.is-hidden {
+    display: none !important;
+}
+

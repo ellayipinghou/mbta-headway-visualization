@@ -1,0 +1,403 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MBTA Rapid Transit Map</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    background: #f0f0f0; display: flex; justify-content: center;
+    min-height: 100vh; padding: 20px;
+    font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  }
+  #map-container {
+    background: #fff; border-radius: 8px;
+    box-shadow: 0 2px 16px rgba(0,0,0,0.1);
+    padding: 24px; max-width: 1500px; width: 100%;
+  }
+  h1 { text-align: center; font-size: 20px; margin-bottom: 4px; font-weight: 700; }
+  .sub { text-align: center; font-size: 11px; color: #999; margin-bottom: 10px; }
+  svg text { font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; }
+  .legend { display:flex; gap:20px; justify-content:center; flex-wrap:wrap; margin-top:12px; font-size:12px; color:#444; }
+  .legend-item { display:flex; align-items:center; gap:6px; }
+  .legend-sw { width:22px; height:5px; border-radius:3px; }
+</style>
+</head>
+<body>
+<div id="map-container">
+  <h1>MBTA Rapid Transit Map</h1>
+  <div class="sub">Schematic · Not to scale</div>
+  <svg id="map" viewBox="30 20 1280 1060" xmlns="http://www.w3.org/2000/svg"></svg>
+  <div class="legend">
+    <div class="legend-item"><div class="legend-sw" style="background:#DA291C"></div>Red Line</div>
+    <div class="legend-item"><div class="legend-sw" style="background:repeating-linear-gradient(90deg,#DA291C 0 6px,transparent 6px 10px)"></div>Mattapan</div>
+    <div class="legend-item"><div class="legend-sw" style="background:#ED8B00"></div>Orange Line</div>
+    <div class="legend-item"><div class="legend-sw" style="background:#003DA5"></div>Blue Line</div>
+    <div class="legend-item"><div class="legend-sw" style="background:#00843D"></div>Green Line</div>
+  </div>
+</div>
+
+<script>
+const svg = document.getElementById('map');
+const NS = 'http://www.w3.org/2000/svg';
+const C = { red:'#DA291C', ora:'#ED8B00', blu:'#003DA5', grn:'#00843D' };
+const LW = 8;
+const CR = 15;
+
+// [name, x, y, labelDir, term, tilt]
+// tilt = rotation angle in degrees (0 = no rotation)
+
+// ═══════ RED LINE ═══════
+const redMain = [
+  ['Alewife',           479,161,'l',1, 0],
+  ['Davis',             519,201,'l',0, 0],
+  ['Porter',            559,241,'l',0, 0],
+  ['Harvard',           599,281,'l',0, 0],
+  ['Central',           639,321,'l',0, 0],
+  ['Kendall/MIT',       679,361,'l',0, 0],
+  ['Charles/MGH',       719,401,'l',0, 0],
+  ['Park Street',       740,420,'r',0, 0],
+  ['Downtown Crossing', 787,462,'r',0, 0],
+  ['South Station',     820,500,'r',0, 0],
+  ['Broadway',          820,540,'r',0, 0],
+  ['Andrew',            820,580,'r',0, 0],
+  ['JFK/UMass',         820,620,'r',0, 0],
+];
+const redAsh = [
+  ['JFK/UMass',    820,620,null,0, 0],
+  ['Savin Hill',   785,655,'l',0, 0],
+  ['Fields Corner',750,690,'l',0, 0],
+  ['Shawmut',      715,725,'l',0, 0],
+  ['Ashmont',      680,760,'l',1, 0],
+];
+const redBra = [
+  ['JFK/UMass',    820,620,null,0, 0],
+  ['North Quincy', 855,655,'r',0, 0],
+  ['Wollaston',    890,690,'r',0, 0],
+  ['Quincy Center',925,725,'r',0, 0],
+  ['Quincy Adams', 960,760,'r',0, 0],
+  ['Braintree',    995,795,'r',1, 0],
+];
+
+// ═══════ MATTAPAN ═══════
+const matt = [
+  ['Ashmont',    680,760,null,0, 0],
+  ['Cedar Grove',680,793,'r',0, 0],
+  ['Butler',     680,826,'r',0, 0],
+  ['Milton',     680,859,'r',0, 0],
+  ['Central Ave',680,892,'r',0, 0],
+  ['Valley Rd',  680,925,'r',0, 0],
+  ['Capen St',   680,958,'r',0, 0],
+  ['Mattapan',   680,991,'r',1, 0],
+];
+
+// ═══════ ORANGE LINE ═══════
+const oraN = [
+  ['Oak Grove',        835, 70,'r',1, 0],
+  ['Malden Center',    835,108,'r',0, 0],
+  ['Wellington',       835,146,'r',0, 0],
+  ['Assembly',         835,184,'r',0, 0],
+  ['Sullivan Square',  835,222,'r',0, 0],
+  ['Community College',835,260,'r',0, 0],
+  ['State',            835,415,'br',0, 0],
+];
+const oraHub = [
+  ['North Station', 835,285,'r',0, 0],
+  ['Haymarket',     835,340,'r',0, 0],
+];
+const oraS = [
+  ['Downtown Crossing',800,450,null,0, 0],
+  ['Chinatown',        765,485,'l',0, 0],
+  ['Tufts Medical Ctr',730,520,'r',0, 0],
+  ['Back Bay',         695,555,'r',0, 0],
+  ['Massachusetts Ave',660,590,'r',0, 0],
+  ['Ruggles',          625,625,'r',0, 0],
+  ['Roxbury Crossing', 590,660,'r',0, 0],
+  ['Jackson Square',   555,695,'r',0, 0],
+  ['Stony Brook',      520,730,'r',0, 0],
+  ['Green Street',     485,765,'r',0, 0],
+  ['Forest Hills',     450,800,'r',1, 0],
+];
+
+// ═══════ BLUE LINE ═══════
+const blu = [
+  ['Bowdoin',        720,310,'l',1, 0],
+  ['Government Ctr', 778,365,null,0, 0],
+  ['State',          835,420,null,0, 0],
+  ['Aquarium',       870,405,'r',0, 0],
+  ['Maverick',       910,365,'r',0, 0],
+  ['Airport',        950,325,'r',0, 0],
+  ['Wood Island',    990,285,'r',0, 0],
+  ['Orient Heights',1030,245,'r',0, 0],
+  ['Suffolk Downs', 1070,205,'r',0, 0],
+  ['Beachmont',     1110,165,'r',0, 0],
+  ['Revere Beach',  1150,125,'r',0, 0],
+  ['Wonderland',    1190, 85,'r',1, 0],
+];
+
+// ═══════ GREEN LINE ═══════
+const gEN = [
+  ['Medford/Tufts',  712, 60,'r',1, 0],
+  ['Ball Square',    712, 95,'r',0, 0],
+  ['Magoun Square',  712,130,'r',0, 0],
+  ['Gilman Square',  712,165,'r',0, 0],
+  ['East Somerville',739,195,'r',0, 0],
+  ['Lechmere',       766,225,'r',0, 0],
+];
+const gDU = [
+  ['East Somerville',739,195,null,0, 0],
+  ['Union Square',   700,195,'l',1, 0],
+];
+const gTrunk = [
+  ['Lechmere',             766,225,null,0, 0],
+  ['Science Park/West End',793,255,'l',0, 0],
+  ['Government Ctr',       787,373,'l',0, 0],
+  ['Park Street',          740,420,'r',0, 0],
+  ['Boylston',             700,460,'a',0, -45],
+  ['Arlington',            660,460,'a',0, -45],
+  ['Copley',               620,460,'a',0, -45],
+  ['Hynes Ctr', 580,460,'a',0, -45],
+  ['Kenmore',              540,460,'ar',0, -45],
+];
+const gHub = [
+  ['North Station',820,285,'l',0, 0],
+  ['Haymarket',    820,340,'l',0, 0],
+];
+const gES = [
+  ['Copley',               620,460,null,0, 0],
+  ['Prudential',           620,493,'l',0, 0],
+  ['Symphony',             620,526,'l',0, 0],
+  ['Northeastern',         595,551,'l',0, 0],
+  ['Museum of Fine Arts',  570,576,'l',0, 0],
+  ['Longwood Medical Area',545,601,'l',0, 0],
+  ['Brigham Circle',       520,626,'l',0, 0],
+  ['Fenwood Rd',           495,650,'l',0, 0],
+  ['Mission Park',         470,675,'l',0, 0],
+  ['Riverway',             445,700,'l',0, 0],
+  ['Back of the Hill',     420,725,'l',0, 0],
+  ['Heath Street',         395,750,'l',1, 0],
+];
+const gB = [
+  ['Kenmore',          540,460,null,0, 0],
+  ['Blandford St',     513,430,'ar',0, ],
+  ['BU East',          486,400,'ar',0, 0],
+  ['BU Central',       459,370,'ar',0, 0],
+  ['Amory St',         432,340,'ar',0, 0],
+  ['Babcock St',       405,310,'ar',0, 0],
+  ["Packard's Corner", 378,280,'ar',0, 0],
+  ['Harvard Ave',      351,250,'b',0, -45],
+  ['Griggs St',        324,250,'b',0, -45],
+  ['Allston St',       297,250,'b',0, -45],
+  ['Warren St',        270,250,'b',0, -45],
+  ['Washington St',    243,250,'b',0, -45],
+  ['Sutherland Rd',    216,250,'b',0, -45],
+  ['Chiswick Rd',      189,250,'b',0, -45],
+  ['Chestnut Hill Ave',162,250,'b',0, -45],
+  ['South St',         135,250,'b',0, -45],
+  ['Boston College',   105,250,'b',1, -45],
+];
+const gC = [
+  ['Kenmore',         540,460,null,0, 0],
+  ["St. Mary's St",   470,460,'b',0, 0],
+  ['Hawes St',        443,430,'b',0, -45],
+  ['Kent St',         416,400,'b',0, -45],
+  ['St. Paul St',     389,400,'b',0, -45],
+  ['Coolidge Corner', 362,400,'b',0, -45],
+  ['Summit Ave',      335,400,'b',0, -45],
+  ['Brandon Hall',    308,400,'b',0, -45],
+  ['Fairbanks St',    281,400,'b',0, -45],
+  ['Washington Sq',   254,400,'b',0, -45],
+  ['Tappan St',       227,400,'b',0, -45],
+  ['Dean Rd',         173,400,'b',0, -45],
+  ['Englewood Ave',   146,400,'b',0, -45],
+  ['Cleveland Circle',119,400,'b',1, -45],
+];
+const gD = [
+  ['Kenmore',           540,460,null,0, 0],
+  ['Fenway',            515,485,'l',0, 0],
+  ['Longwood',          490,510,'l',0, 0],
+  ['Brookline Village', 465,535,'l',0, 0],
+  ['Brookline Hills',   440,560,'l',0, 0],
+  ['Beaconsfield',      415,585,'l',0, 0],
+  ['Reservoir',         390,610,'l',0, 0],
+  ['Chestnut Hill',     365,635,'l',0, 0],
+  ['Newton Centre',     340,660,'l',0, 0],
+  ['Newton Highlands',  315,685,'l',0, 0],
+  ['Eliot',             290,710,'l',0, 0],
+  ['Waban',             265,735,'l',0, 0],
+  ['Woodland',          240,760,'l',0, 0],
+  ['Riverside',         215,785,'l',1, 0],
+];
+
+
+// ══════════════════════════════════════════
+// RENDERING HELPERS
+// ══════════════════════════════════════════
+function el(tag, attrs) {
+  const e = document.createElementNS(NS, tag);
+  for (const [k,v] of Object.entries(attrs)) e.setAttribute(k,v);
+  return e;
+}
+
+const gLineLayer = el('g',{id:'lines'});
+const gStationLayer = el('g',{id:'stations'});
+const gLabelLayer = el('g',{id:'labels'});
+svg.append(gLineLayer, gStationLayer, gLabelLayer);
+
+const bentCoords = new Map();
+
+function smoothPath(pts, r) {
+  if (pts.length < 2) return '';
+  let d = `M${pts[0][0]},${pts[0][1]}`;
+  for (let i = 1; i < pts.length - 1; i++) {
+    const [x0,y0]=pts[i-1], [x1,y1]=pts[i], [x2,y2]=pts[i+1];
+    const d1=Math.hypot(x1-x0,y1-y0), d2=Math.hypot(x2-x1,y2-y1);
+    const cr=Math.min(r, d1/2, d2/2);
+    const p1x=x1-cr*(x1-x0)/d1, p1y=y1-cr*(y1-y0)/d1;
+    const p2x=x1+cr*(x2-x1)/d2, p2y=y1+cr*(y2-y1)/d2;
+    const mx=(p1x+2*x1+p2x)/4, my=(p1y+2*y1+p2y)/4;
+    bentCoords.set(`${x1},${y1}`, [mx, my]);
+    d += ` L${p1x},${p1y} Q${x1},${y1} ${p2x},${p2y}`;
+  }
+  return d + ` L${pts[pts.length-1][0]},${pts[pts.length-1][1]}`;
+}
+
+function drawPoly(arr, color, layer, opts={}) {
+  const pts = arr.map(s=>[s[1],s[2]]);
+  drawPath(smoothPath(pts, CR), color, layer, opts);
+}
+
+function drawPath(d, color, layer, opts={}) {
+  const a = { d, fill:'none', stroke:color, 'stroke-width':opts.w||LW,
+    'stroke-linecap':'round','stroke-linejoin':'round' };
+  if (opts.dash) a['stroke-dasharray'] = opts.dash;
+  (layer||gLineLayer).appendChild(el('path',a));
+}
+
+const drawn = new Set();
+function drawStations(arr, color) {
+  for (const [name,x,y,ld,tm,tilt] of arr) {
+    if (ld===null) continue;
+    const k=`${x},${y}`;
+    if (drawn.has(k)) continue;
+    drawn.add(k);
+
+    const [sx,sy] = bentCoords.get(`${x},${y}`) || [x,y];
+
+    if (tm) {
+      gStationLayer.appendChild(el('circle',{cx:sx,cy:sy,r:7.5,fill:'#fff',stroke:color,'stroke-width':3}));
+      gStationLayer.appendChild(el('circle',{cx:sx,cy:sy,r:3,fill:color}));
+    } else {
+      gStationLayer.appendChild(el('circle',{cx:sx,cy:sy,r:4,fill:'#fff',stroke:color,'stroke-width':2}));
+    }
+
+    let tx=sx,ty=sy,anc='start',dy='0.35em';
+    const g=11;
+    switch(ld){
+      case 'r':  tx+=g; break;
+      case 'l':  tx-=g; anc='end'; break;
+      case 'a':  ty-=g; anc='middle'; dy='0em'; break;
+      case 'b':  ty+=g+4; anc='middle'; dy='0em'; break;
+      case 'ar': tx+=g-2; ty-=g; dy='0em'; break;
+      case 'al': tx-=g-2; ty-=g; anc='end'; dy='0em'; break;
+      case 'br': tx+=g; ty+=g+4; dy='0em'; break;
+      case 'bl': tx-=g; ty+=g+4; anc='end'; dy='0em'; break;
+    }
+
+    // Extra gap when tilt is active
+    if (tilt) {
+      const extra = 3;
+      if (ld === 'b') ty += extra;
+      else if (ld === 'a') ty -= extra;
+      else if (ld === 'r') tx += extra;
+      else if (ld === 'l') tx -= extra;
+    }
+
+    // Adjust anchor for tilted labels so text radiates outward
+    if (tilt && ld === 'b') anc = 'end';
+    if (tilt && ld === 'a') anc = 'start';
+
+    const fs = tm ? 10.5 : 8.5;
+    const fw = tm ? '700' : '400';
+    const attrs = {x:tx, y:ty, 'text-anchor':anc, 'font-size':fs, 'font-weight':fw, fill:'#222', dy};
+    // Apply tilt rotation if non-zero
+    if (tilt) {
+      attrs.transform = `rotate(${tilt}, ${tx}, ${ty})`;
+    }
+    const t = el('text', attrs);
+    t.textContent = name;
+    gLabelLayer.appendChild(t);
+  }
+}
+
+
+// ══════════════════════════════════════════
+// DRAW EVERYTHING
+// ══════════════════════════════════════════
+
+// ── 1. LINE PATHS ──
+drawPoly(gEN, C.grn);
+drawPoly(gDU, C.grn);
+
+const trunkLine = [
+  ...gTrunk.slice(0, 2),
+  ...gHub,
+  ...gTrunk.slice(2),
+];
+drawPoly(trunkLine, C.grn);
+
+drawPoly(gES, C.grn);
+drawPoly(gB, C.grn);
+drawPoly(gC, C.grn);
+drawPoly(gD, C.grn);
+
+drawPoly(redMain, C.red);
+drawPoly(redAsh, C.red);
+drawPoly(redBra, C.red);
+drawPoly(matt, C.red, gLineLayer, {dash:'10 6'});
+
+const oraNFull = [...oraN, ...oraHub].sort((a, b) => a[2] - b[2]);
+drawPoly([...oraNFull, ...oraS], C.ora);
+
+drawPoly(blu, C.blu);
+
+// ── 2. STATION DOTS + LABELS ──
+drawStations(gEN, C.grn);
+drawStations(gDU, C.grn);
+drawStations(gTrunk, C.grn);
+drawStations(gHub, C.grn);
+drawStations(gES, C.grn);
+drawStations(gB, C.grn);
+drawStations(gC, C.grn);
+drawStations(gD, C.grn);
+
+drawStations(redMain, C.red);
+drawStations(redAsh, C.red);
+drawStations(redBra, C.red);
+drawStations(matt, C.red);
+
+drawStations(oraN, C.ora);
+drawStations(oraHub, C.ora);
+drawStations(oraS, C.ora);
+
+drawStations(blu, C.blu);
+
+// ── 3. BRANCH LABELS ──
+[
+  ['RED LINE',    460,155, C.red],
+  ['MATTAPAN',    680,1020,C.red],
+  ['ORANGE LINE', 840,50,  C.ora],
+  ['BLUE LINE',  1240,60, C.blu],
+  ['GREEN-E',     710,40,  C.grn],
+  ['GREEN-B',     105,220, C.grn],
+  ['GREEN-C',     120,380, C.grn],
+  ['GREEN-D',     215,810, C.grn],
+].forEach(([t,x,y,c])=>{
+  const e=el('text',{x,y,'text-anchor':'middle','font-size':10,'font-weight':'800',fill:c,'letter-spacing':'1px'});
+  e.textContent=t;
+  gLabelLayer.appendChild(e);
+});
+</script>
+</body>
+</html>

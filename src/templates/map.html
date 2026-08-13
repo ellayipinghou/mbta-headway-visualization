@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MBTA Visualization System</title>
+    <!-- Link to your CSS file -->
+    <link rel="stylesheet" href="../static/map.css">
+</head>
+<body>
+    <!-- <h1>MBTA Visualization System</h1> -->
+    <div id="map-page">
+        <div id="map-panel">
+            <h1>MBTA Visualization System</h1>
+            <p>Select lines first, then narrow down - each filter affects the ones below it. All selections feed into the headway stats.</p>
+            <hr>
+            <div id="map-lines-filter">
+                <h2>Filter by Line</h2>
+                <label><input type="checkbox" id="lines-all" checked> <span class="ld" style="background:#909090"></span> All Lines</label><br>
+                <label><input class="lc" type="checkbox" value="Red" checked> <span class="ld" style="background:#DA291C"></span> Red Line</label><br>
+                <label><input class="lc" type="checkbox" value="Green-B" checked> <span class="ld" style="background:#00843D">B</span> Green B Line</label><br>
+                <label><input class="lc" type="checkbox" value="Green-C" checked> <span class="ld" style="background:#00843D">C</span> Green C Line</label><br>
+                <label><input class="lc" type="checkbox" value="Green-D" checked> <span class="ld" style="background:#00843D">D</span> Green D Line</label><br>
+                <label><input class="lc" type="checkbox" value="Green-E" checked> <span class="ld" style="background:#00843D">E</span> Green E Line</label><br>
+                <label><input class="lc" type="checkbox" value="Blue" checked> <span class="ld" style="background:#003DA5"></span> Blue Line</label><br>
+                <label><input class="lc" type="checkbox" value="Orange" checked> <span class="ld" style="background:#ED8B00"></span> Orange Line</label><br>
+                <label><input class="lc" type="checkbox" value="Mattapan" checked> <span class="ld" style="background:#DA291C">M</span> Mattapan Line</label><br>
+            </div>
+            <hr>
+            <div id="map-GLX-focus">
+                <h2>Green Line Extension Focus</h2>
+                <div class="glx-btns">
+                    <button class="glx-btn active" data-v="all">All Stops</button>
+                    <button class="glx-btn" data-v="glx">GLX Only</button>
+                    <button class="glx-btn" data-v="non-glx">Non-GLX</button>
+                </div>
+            </div>
+            <hr>
+            <div id="map-station-search">
+                <h2>Search by Station</h2>
+                <input type="text" id="station-search-input" placeholder="Enter station name...">
+                <div class="stop-list" id="stop-list-container">
+                    <div class="stop-item" id="select-all-item">
+                        <input type="checkbox" id="select-all" checked>
+                        <strong>Select All (Within Available Lines)</strong>
+                    </div>
+                    <div id="stop-list"></div>
+                </div>
+            </div>
+            <hr>
+            <div id="map-direction-filter">
+                <h2>Direction</h2>
+                <div class="dir-btns">
+                    <label class="dir-btn"><input type="checkbox" id="directions-all" checked> All</label>
+                    <label class="dir-btn"><input type="checkbox" class="dir-cb" value="North" checked> North</label>
+                    <label class="dir-btn"><input type="checkbox" class="dir-cb" value="South" checked> South</label>
+                    <label class="dir-btn"><input type="checkbox" class="dir-cb" value="East" checked> East</label>
+                    <label class="dir-btn"><input type="checkbox" class="dir-cb" value="West" checked> West</label>
+                    <label class="dir-btn"><input type="checkbox" class="dir-cb" value="Inbound" checked> Inbound</label>
+                    <label class="dir-btn"><input type="checkbox" class="dir-cb" value="Outbound" checked> Outbound</label>
+                </div>
+            </div>
+        </div>
+        <div id="map"></div>
+        <button id="info-btn" aria-label="Map info and legend">&#9432;</button>
+        <div id="info-popup" class="is-hidden" role="dialog" aria-modal="true" aria-label="Map info">
+            <button id="info-popup-close" aria-label="Close info popup">&times;</button>
+            <h3>Usage</h3>
+            <p>Hover over specific stations or line names for headway information. Use the filters on the left to focus on specific lines or branches.</p>
+            <h3>Legend</h3>
+            <ul>
+                <li><strong>Cardinal directions (N, S, E, W):</strong> Directions used by all lines except Mattapan. Hover over stops or lines to see which directions they serve.</li>
+                <li><strong>Inbound and outbound directions:</strong> Directions used by the Mattapan Line. </li>
+            </ul>
+        </div>
+        <div id="map-stats">
+            <h3>Filtered Summary</h3>
+            <div id="stats-content">
+                <p><strong>Stations Visible:</strong> <span id="stations-visible">0</span></p>
+                <p><strong>Average Headway:</strong> <span id="average-headway">0</span></p>
+                <p><strong>Average Std dev Headway:</strong> <span id="stddev-headway">0</span></p>
+                <p><strong>Total Trips:</strong> <span id="total-trips">0</span> </p>
+            </div>
+        </div>  
+    </div>
+    <!-- Link to your JavaScript file -->
+    <div class="tooltip" id="tooltip"></div>
+    <script src="../static/map.js"></script>
+</body>
+</html>

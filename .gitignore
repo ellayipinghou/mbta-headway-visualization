@@ -1,0 +1,12 @@
+
+Headways_2025/*.csv
+*.csv
+*.csv.zip
+data/*.csv
+final_handout.pdf
+
+# Python cache
+__pycache__/
+*.pyc
+.env
+*.duckdb
