@@ -21,9 +21,9 @@ The backend uses **Flask** to serve the visualization and API endpoints, while *
 
 <!-- Replace with the actual screenshot path -->
 
-<img src="mbta-visualization-system/images/homepage.png" alt="MBTA Headway Visualization Homepage" width="600" height="300">
-<img src="mbta-visualization-system/images/non-glx.png" alt="Filtered to Non-GLX only" width="600" height="300">
-<img src="mbta-visualization-system/images/filtered.png" alt="Filtered by Line, with Tooltip" width="600" height="300">
+<img src="src/images/homepage.png" alt="MBTA Headway Visualization Homepage" width="600" height="300">
+<img src="src/images/non-glx.png" alt="Filtered to Non-GLX only" width="600" height="300">
+<img src="src/images/filtered.png" alt="Filtered by Line, with Tooltip" width="600" height="300">
 
 ## Features
 
