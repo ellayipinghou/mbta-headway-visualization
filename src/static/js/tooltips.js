@@ -1,5 +1,5 @@
 import { state } from './state.js';
-import { stations } from './data.js';
+import { stations } from './stationData.js';
 
 export const COLORS = {
     Red: '#DA291C',

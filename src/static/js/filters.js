@@ -1,5 +1,5 @@
 import { state } from './state.js';
-import { stations } from './data.js';
+import { stations } from './stationData.js';
 import { COLORS } from './tooltips.js';
 
 let onUpdate;

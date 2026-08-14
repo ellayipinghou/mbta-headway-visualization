@@ -1,7 +1,7 @@
 // ═══════════════════════════════════════
-  // STATION DATA
-  // [name, x, y, labelDir, term, tilt]
-  // ═══════════════════════════════════════
+// Map geometry data for each station
+// [name, x, y, labelDir, term, tilt]
+// ═══════════════════════════════════════
 
   // ═══════ RED LINE ═══════
   export const redMain = [

@@ -1,3 +1,4 @@
+// Station metadata
 export const stations = [
     { id: "place-alfcl",  name: "Alewife",                    lines: ["Red"],     isGLX: false },
     { id: "place-alsgr",  name: "Allston Street",             mapName: "Allston St",        lines: ["Green-B"], isGLX: false },

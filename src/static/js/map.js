@@ -1,5 +1,5 @@
 import { state } from './state.js';
-import { stations } from './data.js';
+import { stations } from './stationData.js';
 import * as mapData from './mapData.js';
 
 import { showTooltip, showLineTooltip, moveTooltip, hideTooltip} from './tooltips.js';

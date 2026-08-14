@@ -1,5 +1,5 @@
 import { state } from './state.js';
-import { stations } from './data.js';
+import { stations } from './stationData.js';
 import { initializeMap } from './map.js';
 import { fetchDirections, fetchDirectionsByLine, fetchHeadways } from './api.js';
 import { setStationStats, setDirectionData } from './tooltips.js';
