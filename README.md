@@ -265,12 +265,21 @@ mbta-headway-visualization/
     │   └── non-glx.png
     │
     ├── static/
-    │   ├── map.css
-    │   └── map.js
+    │   ├── main.js               # Main frontend application logic
+    │   ├── map.js                # Interactive map rendering
+    │   ├── stationData.js        # Station metadata and map geometry
+    │   ├── mapData.js            # Map geometry data
+    │   ├── api.js                # Backend API requests
+    │   ├── filters.js            # Filter controls and state synchronization
+    │   ├── state.js              # Shared frontend state
+    │   ├── tooltips.js           # Station and line tooltips
+    │   └── map.css               # Visualization styling
     │
     └── templates/
-        └── map.html
+        └── map.html              # Main visualization page
 ```
+
+
 
 ### Important Files
 
@@ -282,8 +291,15 @@ mbta-headway-visualization/
 | `src/directions_db.py`        | Optional utility for querying station directions     |
 | `src/data/`                   | Local cleaned dataset used to populate DuckDB        |
 | `src/headways_cleaned.duckdb` | Generated DuckDB database                            |
-| `src/map.html`                | Main visualization page                              |
-| `src/static/map.js`           | Interactive map and frontend functionality           |
+| `src/templates/map.html`      | Main visualization page                              |
+| `src/static/main.js`          | Main frontend application logic                      |
+| `src/static/map.js`           | Interactive map rendering                            |
+| `src/static/stationData.js`   | Station metadata                                     |
+| `src/static/mapData.js`       | Map geometry data                                    |
+| `src/static/api.js`           | Backend API requests                                 |
+| `src/static/filters.js`       | Filter controls and state synchronization            |
+| `src/static/state.js`         | Shared frontend state                                |
+| `src/static/tooltips.js`      | Station and line tooltip rendering                   |
 | `src/static/map.css`          | Visualization styling                                |
 | `src/images/`                 | Images used in the README/documentation              |
 

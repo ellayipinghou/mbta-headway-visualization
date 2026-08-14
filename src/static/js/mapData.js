@@ -3,8 +3,8 @@
 // [name, x, y, labelDir, term, tilt]
 // ═══════════════════════════════════════
 
-  // ═══════ RED LINE ═══════
-  export const redMain = [
+// ═══════ RED LINE ═══════
+export const redMain = [
     ['Alewife',           479,161,'l',1, 0],
     ['Davis',             519,201,'l',0, 0],
     ['Porter',            559,241,'l',0, 0],
@@ -18,25 +18,25 @@
     ['Broadway',          820,540,'r',0, 0],
     ['Andrew',            820,580,'r',0, 0],
     ['JFK/UMass',         820,620,'r',0, 0],
-  ];
-  export const redAsh = [
+];
+export const redAsh = [
     ['JFK/UMass',    820,620,null,0, 0],
     ['Savin Hill',   785,655,'l',0, 0],
     ['Fields Corner',750,690,'l',0, 0],
     ['Shawmut',      715,725,'l',0, 0],
     ['Ashmont',      680,760,'l',1, 0],
-  ];
-  export const redBra = [
+];
+export const redBra = [
     ['JFK/UMass',    820,620,null,0, 0],
     ['North Quincy', 855,655,'r',0, 0],
     ['Wollaston',    890,690,'r',0, 0],
     ['Quincy Center',925,725,'r',0, 0],
     ['Quincy Adams', 960,760,'r',0, 0],
     ['Braintree',    995,795,'r',1, 0],
-  ];
+];
 
-  // ═══════ MATTAPAN ═══════
-  export const matt = [
+// ═══════ MATTAPAN ═══════
+export const matt = [
     ['Ashmont',    680,760,null,0, 0],
     ['Cedar Grove',680,793,'r',0, 0],
     ['Butler',     680,826,'r',0, 0],
@@ -45,10 +45,10 @@
     ['Valley Rd',  620,859,'b',0, -45],
     ['Capen St',   590,859,'b',0, -45],
     ['Mattapan',   560,859,'b',1, -45],
-  ];
+];
 
-  // ═══════ ORANGE LINE ═══════
-  export const oraN = [
+// ═══════ ORANGE LINE ═══════
+export const oraN = [
     ['Oak Grove',        835, 70,'r',1, 0],
     ['Malden Center',    835,108,'r',0, 0],
     ['Wellington',       835,146,'r',0, 0],
@@ -56,12 +56,12 @@
     ['Sullivan Square',  835,222,'r',0, 0],
     ['Community College',835,260,'r',0, 0],
     ['State',            835,415,'br',0, 0],
-  ];
-  export const oraHub = [
+];
+export const oraHub = [
     ['North Station', 835,285,'r',0, 0],
     ['Haymarket',     835,340,'r',0, 0],
-  ];
-  export const oraS = [
+];
+export const oraS = [
     ['Downtown Crossing',800,450,null,0, 0],
     ['Chinatown',        765,485,'l',0, 0],
     ['Tufts Medical Ctr',730,520,'r',0, 0],
@@ -73,10 +73,10 @@
     ['Stony Brook',      520,730,'r',0, 0],
     ['Green Street',     485,765,'r',0, 0],
     ['Forest Hills',     450,800,'r',1, 0],
-  ];
+];
 
-  // ═══════ BLUE LINE ═══════
-  export const blu = [
+// ═══════ BLUE LINE ═══════
+export const blu = [
     ['Bowdoin',        720,310,'l',1, 0],
     ['Government Ctr', 778,365,null,0, 0],
     ['State',          835,420,null,0, 0],
@@ -89,9 +89,9 @@
     ['Beachmont',     1110,165,'r',0, 0],
     ['Revere Beach',  1150,125,'r',0, 0],
     ['Wonderland',    1190, 85,'r',1, 0],
-  ];
+];
 
-  // ═══════ GREEN LINE ═══════
+// ═══════ GREEN LINE ═══════
 export const gEN_upper = [
     ['Medford/Tufts',  627, 75,'r',1, 0],
     ['Ball Square',    655, 105,'r',0, 0],
@@ -102,12 +102,12 @@ export const gEN_upper = [
 ];
 
 export const gEN_lower = [
-    [null,             754,212,null,0, 0],  // branch point
+[null,             754,212,null,0, 0],  // branch point
     ['Lechmere',       766,225,'r',0, 0],
 ];
-  
+
 export const gDU = [
-    [null,           752,212,null,0, 0],  // branch point
+[null,           752,212,null,0, 0],  // branch point
     ['Union Square', 700,212,'l',1, 0],
 ];
 
@@ -125,12 +125,12 @@ export const gBCD = [
     ['Hynes Ctr',            580,460,'a',0, -45],
     ['Kenmore',              540,460,'ar',0, -45],
 ];
-  
+
 export const gHub = [
     ['North Station',820,285,'l',0, 0],
     ['Haymarket',    820,340,'l',0, 0],
 ];
-  
+
 export const gES = [
     ['Copley',               620,460,null,0, 0],
     ['Prudential',           620,493,'l',0, 0],
@@ -144,7 +144,7 @@ export const gES = [
     ['Riverway',             445,700,'l',0, 0],
     ['Back of the Hill',     420,725,'l',0, 0],
     ['Heath Street',         395,750,'l',1, 0],
-  ];
+];
 
 export const gB = [
     ['Kenmore',          540,460,null,0, 0],
@@ -164,8 +164,8 @@ export const gB = [
     ['Chestnut Hill Ave',162,250,'b',0, -45],
     ['South St',         135,250,'b',0, -45],
     ['Boston College',   105,250,'b',1, -45],
-  ];
-  
+];
+
 export const gC = [
     ['Kenmore',         540,460,null,0, 0],
     ["St. Mary's St",   470,460,'b',0, 0],
@@ -181,7 +181,7 @@ export const gC = [
     ['Dean Rd',         176,400,'b',0, -45],
     ['Englewood Ave',   146,400,'b',0, -45],
     ['Cleveland Circle',116,400,'b',1, -45],
-  ];
+];
 
 export const gD = [
     ['Kenmore',           540,460,null,0, 0],
